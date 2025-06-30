@@ -8,14 +8,19 @@ import { IoShareSocialOutline } from "react-icons/io5";
 
 export default function ProductDetails({ productDetails }) {
   console.log(productDetails);
-  const [selectedColor, setSelectedColor] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("XS");
+  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  if (!productDetails?.data) return <div>Loading...</div>;
+  const images = productDetails?.data?.image || {};
+  const mainImage = images[selectedImage]?.url || productDetails.data.thumbnail;
 
-  const increaseQty = () => setQuantity((qty) => qty + 1);
+  const maxQuantity = productDetails.data.total_stock_qty;
+  const increaseQty = () => {
+    if (quantity < maxQuantity) {
+      setQuantity((qty) => qty + 1);
+    }
+  };
   const decreaseQty = () => setQuantity((qty) => (qty > 1 ? qty - 1 : 1));
 
   const description =
@@ -31,7 +36,7 @@ export default function ProductDetails({ productDetails }) {
         <div className="w-[500px]">
           <div className="h-[480px] flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden bg-white">
             <Image
-              src={productDetails.data.thumbnail}
+              src={mainImage}
               alt={productDetails.data.name}
               width={480}
               height={480}
@@ -41,27 +46,26 @@ export default function ProductDetails({ productDetails }) {
           </div>
 
           <div className="flex gap-2 mt-2 flex-wrap">
-            {Object.values(productDetails?.data?.image || {}).map(
-              (image, i) => (
-                <div key={i} className="w-[60px] h-[60px]">
-                  <Image
-                    src={image.url}
-                    width={60}
-                    height={60}
-                    alt={`Thumbnail ${i + 1}`}
-                    className={`object-contain w-full h-full rounded-md cursor-pointer border ${
-                      i === selectedColor
-                        ? "border-2 border-[#e44d2e]"
-                        : "border border-gray-300"
-                    }`}
-                    onClick={() => setSelectedColor(i)}
-                  />
-                </div>
-              )
-            )}
+            {images.map((img, i) => (
+              <div
+                key={i}
+                className={`w-[60px] h-[60px] rounded-md overflow-hidden relative cursor-pointer border ${
+                  selectedImage === i
+                    ? "border-2 border-[#00A788]"
+                    : "border border-gray-300"
+                }`}
+                onClick={() => setSelectedImage(i)}
+              >
+                <Image
+                  src={img.url}
+                  alt={`Thumbnail ${i + 1}`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            ))}
           </div>
         </div>
-
         {/* middle: Details */}
         <div className="flex-1">
           <div className="w-[500px]">
@@ -132,7 +136,12 @@ export default function ProductDetails({ productDetails }) {
 
                 <button
                   onClick={increaseQty}
-                  className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center hover:bg-gray-200 transition"
+                  disabled={quantity >= maxQuantity}
+                  className={`w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center transition ${
+                    quantity >= maxQuantity
+                      ? "cursor-not-allowed opacity-50"
+                      : "hover:bg-gray-200"
+                  }`}
                 >
                   +
                 </button>
