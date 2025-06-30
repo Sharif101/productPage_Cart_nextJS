@@ -8,7 +8,7 @@ import { FaRegUser } from "react-icons/fa6";
 
 export default function Navbar() {
   return (
-    <nav className="bg-[#0C1327] py-4 px-6 md:px-12">
+    <div className="bg-[#0C1327] py-4 px-6 md:px-12">
       <div className="max-w-8xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-white font-bold text-xl">
           <Image src={logo} alt="Logo" width={30} height={30} />
@@ -39,6 +39,6 @@ export default function Navbar() {
           <FaRegUser size={20} />
         </div>
       </div>
-    </nav>
+    </div>
   );
 }
