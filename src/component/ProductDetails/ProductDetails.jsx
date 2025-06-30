@@ -7,13 +7,17 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
 
 export default function ProductDetails({ productDetails }) {
-  console.log(productDetails);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
-  const images = productDetails?.data?.image || {};
-  const mainImage = images[selectedImage]?.url || productDetails.data.thumbnail;
+  const imageArray = Object.values(productDetails.data.image || {});
+  const mainImage =
+    selectedVariant?.image ||
+    imageArray?.[selectedImage]?.url ||
+    productDetails?.data?.thumbnail ||
+    "";
 
   const maxQuantity = productDetails.data.total_stock_qty;
   const increaseQty = () => {
@@ -26,6 +30,8 @@ export default function ProductDetails({ productDetails }) {
   const description =
     productDetails.data.description || "No description available.";
 
+  console.log({ productDetails, selectedVariant });
+
   return (
     <div className="">
       <div className="my-3 text-sm text-gray-700 max-w-8xl mx-auto px-30">
@@ -34,10 +40,10 @@ export default function ProductDetails({ productDetails }) {
 
       <div className="flex justify-between gap-5 max-w-8xl mx-auto px-30 bg-white py-5">
         <div className="w-[500px]">
-          <div className="h-[480px] flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden bg-white">
+          <div className="w-[500px] h-[480px] flex items-center justify-center border border-gray-300 rounded-lg overflow-hidden bg-white">
             <Image
               src={mainImage}
-              alt={productDetails.data.name}
+              alt="Selected Product Image"
               width={480}
               height={480}
               className="object-contain max-w-full max-h-full"
@@ -45,24 +51,21 @@ export default function ProductDetails({ productDetails }) {
             />
           </div>
 
+          {/* Thumbnails */}
           <div className="flex gap-2 mt-2 flex-wrap">
-            {images.map((img, i) => (
-              <div
+            {imageArray.map((img, i) => (
+              <Image
                 key={i}
-                className={`w-[60px] h-[60px] rounded-md overflow-hidden relative cursor-pointer border ${
+                src={img.url}
+                width={60}
+                height={60}
+                className={`w-[60px] h-[60px] object-contain rounded-md cursor-pointer border ${
                   selectedImage === i
                     ? "border-2 border-[#00A788]"
                     : "border border-gray-300"
                 }`}
                 onClick={() => setSelectedImage(i)}
-              >
-                <Image
-                  src={img.url}
-                  alt={`Thumbnail ${i + 1}`}
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              />
             ))}
           </div>
         </div>
@@ -124,6 +127,28 @@ export default function ProductDetails({ productDetails }) {
             </div>
 
             {/* Color Selection */}
+            {productDetails?.data?.is_variant && (
+              <div className="mt-4">
+                <p className="font-medium text-gray-700">Available Colors:</p>
+                <div className="flex gap-2 mt-2 flex-wrap">
+                  {productDetails?.data?.variations?.map((imgInfo, i) => (
+                    <Image
+                      key={i}
+                      src={imgInfo.image}
+                      alt={`Variant ${i + 1}`}
+                      width={50}
+                      height={50}
+                      className={`w-[50px] h-[50px] object-contain rounded-md cursor-pointer border ${
+                        selectedVariant?.image === imgInfo.image
+                          ? "border-2 border-green-600"
+                          : "border border-gray-300"
+                      }`}
+                      onClick={() => setSelectedVariant(imgInfo)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="mb-6">
               <div className="font-semibold mb-1">Quantity</div>
