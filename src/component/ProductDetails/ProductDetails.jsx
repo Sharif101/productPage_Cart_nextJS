@@ -1,12 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdFavoriteBorder, MdStar } from "react-icons/md";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoShareSocialOutline } from "react-icons/io5";
+import { Cart } from "@/contexts/context";
+import { handleAddToCart } from "@/utils/handleCart";
 
 export default function ProductDetails({ productDetails }) {
+  const { stateCart, dispatchCart } = useContext(Cart);
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -30,6 +34,16 @@ export default function ProductDetails({ productDetails }) {
 
   const description =
     productDetails.data.description || "No description available.";
+
+  const onAddToCart = () => {
+    handleAddToCart({
+      productDetails,
+      selectedVariant,
+      quantity,
+      stateCart,
+      dispatchCart,
+    });
+  };
 
   return (
     <div className="">
@@ -207,7 +221,10 @@ export default function ProductDetails({ productDetails }) {
               </div>
             </div>
 
-            <button className="w-full bg-green-700 text-white font-bold py-3 rounded cursor-pointer hover:bg-green-800 transition">
+            <button
+              className="w-full bg-green-700 text-white font-bold py-3 rounded cursor-pointer hover:bg-green-800 transition"
+              onClick={onAddToCart}
+            >
               Add to Cart
             </button>
           </div>
