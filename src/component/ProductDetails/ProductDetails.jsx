@@ -72,6 +72,9 @@ export default function ProductDetails({ productDetails }) {
             <h2 className="text-2xl mb-2 text-[#0F172A]">
               {productDetails.data.name}
             </h2>
+            <p className="text-[14px] text-gray">
+              {productDetails?.data?.merchant?.shop_name}
+            </p>
 
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-1">
@@ -108,6 +111,9 @@ export default function ProductDetails({ productDetails }) {
                   ৳{productDetails.data.product_detail.regular_price}
                 </span>
               )}
+              <span className="text-[12px] ml-5">
+                Total Quantity: {productDetails.data.total_stock_qty}
+              </span>
             </div>
 
             <div className="flex items-center gap-2 mb-2">
