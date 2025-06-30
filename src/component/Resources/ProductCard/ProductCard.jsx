@@ -9,7 +9,7 @@ export default function ProductCard({ product, discountPercentage }) {
       key={product.id}
       className="cursor-pointer bg-white p-3 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow duration-300 group"
     >
-      <Link href={`/products/${product.slug}`}>
+      <Link href={`/product/${product.slug}`}>
         <div className="relative w-full h-[250px] rounded-lg overflow-hidden mb-2">
           <Image
             src={product.thumbnail}
