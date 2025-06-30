@@ -147,6 +147,29 @@ export default function ProductDetails({ productDetails }) {
                     />
                   ))}
                 </div>
+
+                {selectedVariant?.variation_attributes?.length > 0 && (
+                  <div className="my-6">
+                    <h4 className="text-base font-semibold text-[#0F172A] mb-3 border-b pb-1 border-gray-200">
+                      Selected Configuration
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {selectedVariant.variation_attributes.map((attr, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between px-4 py-2 border border-gray-200 rounded-lg shadow-xs"
+                        >
+                          <span className="text-sm text-gray-600 font-medium">
+                            {attr.attribute.name}
+                          </span>
+                          <span className="text-sm text-gray-800 font-semibold">
+                            {attr.attribute_option.attribute_value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
