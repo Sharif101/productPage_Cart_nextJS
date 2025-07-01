@@ -69,6 +69,7 @@ export default function ProductDetails({ productDetails }) {
               <Image
                 key={i}
                 src={img.url}
+                alt={i + 1}
                 width={60}
                 height={60}
                 className={`w-[60px] h-[60px] object-contain rounded-md cursor-pointer border ${
@@ -278,11 +279,6 @@ export default function ProductDetails({ productDetails }) {
             <h3 className="font-semibold mb-4">Sold by</h3>
 
             <div className="flex items-center gap-3 mb-3">
-              <Image
-                src=""
-                alt="shop logo"
-                className="w-10 h-10 rounded-full object-cover"
-              />
               <div>
                 <div className="flex items-center gap-2">
                   <p className="font-semibold text-base">BD FASHION HOUSE</p>

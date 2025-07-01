@@ -54,7 +54,7 @@ export default function ProductCart() {
           </div>
 
           <div className="bg-white p-4 rounded-lg shadow">
-            {cartProducts.map((item, i) => (
+            {cartProducts?.map((item, i) => (
               <div key={i} className="flex items-start gap-4 mb-10">
                 <Image
                   src={item.image}
