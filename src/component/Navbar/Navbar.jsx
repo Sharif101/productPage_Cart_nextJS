@@ -5,6 +5,7 @@ import logo from "../../asstes/logo/logo.png";
 import { FiSearch } from "react-icons/fi";
 import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { FaRegUser } from "react-icons/fa6";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
@@ -30,10 +31,12 @@ export default function Navbar() {
 
         <div className="flex items-center gap-6 text-white text-xl">
           <div className="relative">
-            <HiOutlineShoppingCart size={22} />
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 py-[1px] rounded-full">
+            <Link href="/productcart">
+              <HiOutlineShoppingCart size={22} />
+            </Link>
+            {/* <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] px-1.5 py-[1px] rounded-full">
               12
-            </span>
+            </span> */}
           </div>
 
           <FaRegUser size={20} />

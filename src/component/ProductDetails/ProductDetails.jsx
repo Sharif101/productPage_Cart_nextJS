@@ -200,7 +200,7 @@ export default function ProductDetails({ productDetails }) {
               <div className="flex items-center justify-between border border-gray-200 rounded-full w-fit px-1 py-1">
                 <button
                   onClick={decreaseQty}
-                  className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center hover:bg-gray-200 transition"
+                  className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center hover:bg-gray-200 transition cursor-pointer"
                 >
                   -
                 </button>
@@ -210,7 +210,7 @@ export default function ProductDetails({ productDetails }) {
                 <button
                   onClick={increaseQty}
                   disabled={quantity >= maxQuantity}
-                  className={`w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center transition ${
+                  className={`w-8 h-8 rounded-full bg-gray-100 text-gray-600 text-xl flex items-center justify-center transition cursor-pointer ${
                     quantity >= maxQuantity
                       ? "cursor-not-allowed opacity-50"
                       : "hover:bg-gray-200"
