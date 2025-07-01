@@ -1,43 +1,78 @@
+import { toast } from "react-toastify";
+
+const toastSuccess = () => {
+  toast.dismiss();
+  toast.success("Product Add to Cart", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};
+
+const toastError = (message = "Product already in cart") => {
+  toast.dismiss();
+  toast.error(message, {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};
+
 export const handleAddToCart = ({
   productDetails,
   selectedVariant = null,
-  quantity = 1,
+  quantity,
   stateCart,
   dispatchCart,
 }) => {
   const product = productDetails?.data;
+  const isVariant = !!selectedVariant;
+  const qty = Math.max(quantity, 1);
 
-  const item = {
-    id: selectedVariant?.id || product.id,
-    name: productDetails?.data?.name || product.title,
-    image: selectedVariant?.image || product.image,
-    price: parseFloat(
-      product.discount_price || selectedVariant?.discount_price || product.price
-    ),
-    quantity: Math.max(quantity, 1),
-    variant: selectedVariant?.variation_attributes || [],
-  };
+  const item = isVariant
+    ? {
+        ...selectedVariant,
+        name: product.name,
+        quantity: qty,
+        is_variant: true,
+        regular_price: parseInt(selectedVariant.regular_price),
+        discount_price: parseInt(selectedVariant.discount_price),
+        id_delivery_fee: parseInt(selectedVariant.id_delivery_fee),
+      }
+    : {
+        id: product.id,
+        name: product.name,
+        image: product.thumbnail,
+        quantity: qty,
+        is_variant: false,
+        sku: product?.sku,
+        total_stock_qty: product.total_stock_qty,
+        regular_price: parseInt(product.product_detail.regular_price),
+        discount_price: parseInt(product.product_detail.discount_price),
+      };
 
-  // Check if item with same variant already exists
-  const existingIndex = stateCart.info.findIndex((cartItem) => {
-    const sameId = cartItem.id === item.id;
-    const sameVariant =
-      JSON.stringify(cartItem.variant || []) ===
-      JSON.stringify(item.variant || []);
-    return sameId && sameVariant;
-  });
+  const alreadyExists = stateCart.info.some(
+    (cartItem) =>
+      cartItem.id === item.id &&
+      cartItem.is_variant === item.is_variant &&
+      JSON.stringify(cartItem) === JSON.stringify(item)
+  );
 
-  let updatedCart;
-
-  if (existingIndex > -1) {
-    // Update quantity if already exists
-    updatedCart = [...stateCart.info];
-    updatedCart[existingIndex].quantity += item.quantity;
-  } else {
-    // Add new item
-    updatedCart = [...stateCart.info, item];
+  if (alreadyExists) {
+    toastError();
+    return;
   }
 
-  // Dispatch updated cart to reducer
-  dispatchCart({ type: "set", payload: updatedCart });
+  dispatchCart({ type: "set", payload: [...stateCart.info, item] });
+  toastSuccess();
 };
