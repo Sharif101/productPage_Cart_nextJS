@@ -9,7 +9,7 @@ export default function ProductCart() {
   const { stateCart, dispatchCart } = useContext(Cart);
   const cartProducts = stateCart.info;
 
-  const subTotal = cartProducts.reduce((sum, item) => {
+  const subTotal = (cartProducts ?? []).reduce((sum, item) => {
     const qty = item.quantity || 1;
     return sum + item.discount_price * qty;
   }, 0);
