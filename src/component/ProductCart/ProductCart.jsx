@@ -33,6 +33,11 @@ export default function ProductCart() {
     dispatchCart({ type: "set", payload: updatedCart });
   };
 
+  const handleDeleteItem = (sku) => {
+    const updatedCart = cartProducts.filter((item) => item.sku !== sku);
+    dispatchCart({ type: "set", payload: updatedCart });
+  };
+
   return (
     <div className="px-20 py-8 bg-gray-50 min-h-screen">
       <div className="text-sm text-gray-500 mb-4">Home &gt; My Cart</div>
@@ -104,7 +109,10 @@ export default function ProductCart() {
                       </button>
                     </div>
                     <span>
-                      <RiDeleteBinLine className="text-[17px] text-[#94A3B8] cursor-pointer" />
+                      <RiDeleteBinLine
+                        className="text-[17px] text-[#94A3B8] cursor-pointer"
+                        onClick={() => handleDeleteItem(item.sku)}
+                      />
                     </span>
                   </div>
                 </div>
